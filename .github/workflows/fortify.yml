@@ -1,0 +1,30 @@
+name: Fortify Scan
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'develop'
+
+jobs:
+  build:
+    name: Build source & run fortify scan
+    runs-on: [self-hosted, linux, x64, philips-code-hub, ubuntu-latest]
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 #v4.1.1
+        with:
+          fetch-depth: 0
+
+      - name: Fortify Scan Action
+        uses: ./.
+        env:
+          fortify_version: 23.2.0
+          FORTIFY_APPLICATION_NAME: DigitalPlus_Community_UI # Usually the application name is your github repository name as mentioned in Readme - Here we are using different repo
+          FORTIFY_VERSION_NAME: develop # Usually the version name is your github repository branch name as mentioned in Readme - Here we are using different repo' branch
+          FORTIFY_HOST_URL: https://fortify.philips.com/ssc
+          FORTIFY_UNIFIED_TOKEN: ${{ secrets.FORTIFY_UNIFIED_TOKEN }}
+          FORTIFY_TRANSLATION_ARGS: -exclude **/node_modules/**/* **/*.js*
+          SOURCE_HOME_DIR: ./src
+          SKIP_GATE: true

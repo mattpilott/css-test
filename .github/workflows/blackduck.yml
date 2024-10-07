@@ -1,0 +1,25 @@
+name: Blackduck Scan
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'develop'
+
+jobs:
+  build:
+    name: Build source & run fortify scan
+    runs-on: [self-hosted, linux, x64, philips-code-hub, ubuntu-latest]
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 #v4.1.1
+        with:
+          fetch-depth: 0
+      - name: Run BlackDuck scan
+        uses: philips-internal/blackduck-scan-action@main
+        with:
+          project_name: "DigitalPlus_Community_UI"
+          project_version: "develop"
+          blackduck_token: ${{ secrets.BLACKDUCK_TOKEN }}
+          scan_mode: "INTELLIGENT"
