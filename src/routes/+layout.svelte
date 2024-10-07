@@ -8,6 +8,6 @@
 	<meta name="build" content={import.meta.env.build} />
 </svelte:head>
 
-<Loader />
+<!-- <Loader /> -->
 
 <slot />
